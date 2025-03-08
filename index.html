@@ -593,8 +593,9 @@
         function generate_url()
         {
             let url = window.location.href;
+            url += "?";
 
-            let url_string = "?";
+            let url_string = "";
             let clue_num = 0;
             for (let i = 0; i < 4; ++i)
             {
@@ -608,7 +609,7 @@
                     url_string += "~";
             }
 
-            document.getElementById("url-output").innerText = url + url_string;
+            document.getElementById("url-output").innerText = url + btoa(url_string);
         }
 
         function populate_answer_row(row_num, connection_index)
@@ -951,14 +952,16 @@
 
         let connections = [{clue_nums: [], connection: "", solved: 0}, {clue_nums: [], connection: "", solved: 0}, {clue_nums: [], connection: "", solved: 0}, {clue_nums: [], connection: "", solved: 0}];
 
-        let url = window.location.href;
-        let params = url.split("?")[1];
-
         document.getElementById("game").classList.add("display-none");
         document.getElementById("generator").classList.add("display-none");
 
+        let url = window.location.href;
+        let params = url.split("?")[1];
+
         if (params)
         {
+            params = atob(params);
+
             let connection_data = params.split("~");
 
             let connection_num = 0;
