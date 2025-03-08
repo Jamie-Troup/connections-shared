@@ -598,10 +598,10 @@
             let clue_num = 0;
             for (let i = 0; i < 4; ++i)
             {
-                url_string += "connection=" + document.getElementById("connection-" + (i + 1)).value;
+                url_string += "connection=" + document.getElementById("connection-" + (i + 1)).value.replaceAll(' ', '+');
                 for (let j = 0; j < 4; ++j)
                 {
-                    url_string += "&clue=" + document.getElementById("clue-" + (clue_num + 1)).value;
+                    url_string += "&clue=" + document.getElementById("clue-" + (clue_num + 1)).value.replaceAll(' ', '+');
                     clue_num++;
                 }
                 if (i < 3)
@@ -970,10 +970,10 @@
                     let key_or_val = key_val_pair.split("=");
 
                     if (key_or_val[0] == "connection")
-                        connections[connection_num].connection = key_or_val[1];
+                        connections[connection_num].connection = key_or_val[1].replaceAll('+', ' ');
                     else if (key_or_val[0] == "clue")
                     {
-                        clues.push(key_or_val[1]);
+                        clues.push(key_or_val[1].replaceAll('+', ' '));
                         connections[connection_num].clue_nums.push(clues_arr_index++);
                     }
                 });
