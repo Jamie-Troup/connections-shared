@@ -247,6 +247,25 @@
             }
         }
 
+        .reveal {
+            width: 5rem;
+            height: 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+            color: white;
+            font-weight: bold;
+            font-family: arial;
+            text-transform: uppercase;
+            margin: 1rem;
+            padding: 0 1rem;
+            border-radius: 1rem;
+            user-select: none;
+            z-index: 2;
+            cursor: pointer;
+        }
+
         .submit-button {
             width: 5rem;
             height: 4rem;
@@ -584,6 +603,9 @@
                     <div class="restart disabled" id="restart" onclick="restart()">
                         Restart
                     </div>
+                    <div class="reveal" id="reveal" onclick="reveal()">
+                        REVEAL
+                    </div>
                 </div>
             </div>
         </div>
@@ -631,6 +653,39 @@
             let answer_row = document.getElementById("clue-answer-" + row_num);
             answer_row.classList.add("clue-answers-show");
             answer_row.classList.add("show-answer");
+        }
+
+        function reveal()
+        {
+            for (let i = connections_solved * 4; i < 16; ++i)
+            {
+                if (i == 0)
+                    boxes[i].element.classList.add("correct-left-box");
+                else
+                {
+                    const remainder = i % 4;
+
+                    if (remainder == 0)
+                        boxes[i].element.classList.add("correct-left-box");
+                    else if (remainder == 1 || remainder == 2)
+                        boxes[i].element.classList.add("correct-central-box");
+                    else
+                        boxes[i].element.classList.add("correct-right-box");
+                }
+            }
+
+            let index = 0;
+            connections.forEach(async (connection) => {
+                if (connection.solved == 0)
+                {
+                    populate_answer_row(connections_solved, index);
+                    ++connections_solved;
+                    connection.solved = 1;
+                }
+                ++index;
+            });
+
+            document.getElementById("restart").classList.remove("disabled");
         }
 
         function init_gui()
