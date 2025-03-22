@@ -4,79 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport">
 
-    <style>
-        // Internal CSS
-        .connections-cont {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .clue-cont {
-            display: flex;
-            flex-direction: column;
-        }
+    <style>		
+		.flex-center {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			
+			&.space-around {
+				justify-content: space-around;
+			}
+			
+			&.full-width {
+				width: 100%;
+			}
+		}
+		
+		.text-params {
+			font-weight: bold;
+            font-family: arial;
+            text-transform: uppercase;
+            user-select: none;
+            -webkit-user-select: none;
+            
+            &.not-bold {
+				font-weight: initial;
+			}
+		}
 
         .clue-row {
-            display: flex;
             flex-direction: row;
-            justify-content: center;
         }
 
         .clue-box {
-            border-radius: 1rem;
-            background: aqua;
-            margin: 1rem;
             width: 10rem;
             height: 10rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+            
             font-size: 1.4rem;
-            text-transform: uppercase;
-            font-family: arial;
-            user-select: none;
+            
+            background: aqua;
+            
+            margin: 1rem;
+            
+            border-radius: 1rem;
+            
             position: relative;
+            
+            cursor: pointer;
+            
             z-index: 2;
+            
+            &.clicked {
+				background: cadetblue;
+			}
         }
 
         .clue-answers {
             position: absolute;
+            
             width: 48rem;
             height: 12rem;
+            
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            
             display: none;
+            
             opacity: 0;
+            
             z-index: 2;
-        }
-
-        .clue-answers-show {
-            display: flex;
         }
 
         .answer-connection {
             font-size: 1.4rem;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            user-select: none;
         }
 
         .answer-clues {
-            text-transform: uppercase;
             font-size: 1.4rem;
-            font-family: arial;
-            user-select: none;
         }
 
         .incorrect-shake {
             animation: 0.75s 1 normal incorrect-shake;
         }
 
-        @keyframes incorrect-shake {
+        .correct-right-box {
+            animation: 0.75s 1 normal correct-right-box;
+            cursor: initial;
+            animation-fill-mode: forwards;
+        }
+
+        .correct-left-box {
+            animation: 0.75s 1 normal correct-left-box;
+            cursor: initial;
+            animation-fill-mode: forwards;
+        }
+
+        .correct-central-box {
+            animation: 0.75s 1 normal correct-centre-box;
+            cursor: initial;
+            animation-fill-mode: forwards;
+        }
+
+        .show-answer {
+            animation: 0.75s 1 normal opacity-show;
+            animation-fill-mode: forwards;
+        }
+        
+		@keyframes incorrect-shake {
             0% {
                 right: 0rem;
             }
@@ -106,31 +138,6 @@
             }
         }
 
-        .correct-right-box {
-            animation: 0.75s 1 normal correct-right-box;
-            animation-fill-mode: forwards;
-            cursor: initial;
-            color: transparent;
-        }
-
-        .correct-left-box {
-            animation: 0.75s 1 normal correct-left-box;
-            animation-fill-mode: forwards;
-            cursor: initial;
-        }
-
-        .correct-central-box {
-            animation: 0.75s 1 normal correct-centre-box;
-            animation-fill-mode: forwards;
-            cursor: initial;
-            color: transparent;
-        }
-
-        .show-answer {
-            animation: 0.75s 1 normal opacity-show;
-            animation-fill-mode: forwards;
-        }
-
         @keyframes correct-centre-box {
             from {margin: 1rem 1rem; padding: 0rem 0rem; border-radius: 1rem; background: aqua; color: initial;}
             to   {margin: 1rem 0rem; padding: 0rem 1rem; border-radius: 0rem; background: lime; color: transparent;}
@@ -151,7 +158,7 @@
             to {opacity: 1;}
         }
 
-        @keyframes popup-temp {
+        @keyframes fade-away {
             0% {
                 opacity: 0;
                 z-index: 3;
@@ -170,187 +177,61 @@
             }
         }
 
-        .clicked {
-            background: cadetblue;
-            cursor: pointer;
-        }
-
-        .not-clicked {
-            cursor: pointer;
-        }
-
         .button-row {
-            display: flex;
             flex-direction: row;
-            align-items: center;
-            justify-content: center;
         }
-
-        .shuffle-button {
+        
+		.grid-btn {
             width: 5rem;
             height: 4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            
             background: black;
             color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
             margin: 1rem;
             padding: 0 1rem;
             border-radius: 1rem;
             cursor: pointer;
-            user-select: none;
             z-index: 2;
-        }
-
-        .lives {
-            width: 5rem;
-            height: 4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: black;
-            color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            margin: 1rem;
-            padding: 0 1rem;
-            border-radius: 1rem;
-            user-select: none;
-            z-index: 2;
-        }
-
-        .restart {
-            width: 5rem;
-            height: 4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: black;
-            color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            margin: 1rem;
-            padding: 0 1rem;
-            border-radius: 1rem;
-            user-select: none;
-            z-index: 2;
-            cursor: pointer;
-
-            &.disabled {
+            
+			&.disabled {
                 cursor: initial;
                 opacity: 0.4;
             }
         }
-
-        .reveal {
-            width: 5rem;
-            height: 4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: black;
+        
+        .popup {
+			&.won-lost {
+				font-size: 2rem;				
+			}
+			
+			&.one-away-already-guessed {
+				font-sie: 1.4rem;
+			}
+			
+			&.show {
+				z-index: 3;
+			}
+			
+			&.fade-away {
+				animation: 3s 1 normal fade-away;
+			}
+			
+			&.permanent {
+				animation: 0.75s 1 normal opacity-show;
+				animation-fill-mode: forwards;
+			}
+            
             color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            margin: 1rem;
-            padding: 0 1rem;
-            border-radius: 1rem;
-            user-select: none;
-            z-index: 2;
-            cursor: pointer;
-        }
-
-        .submit-button {
-            width: 5rem;
-            height: 4rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: black;
-            color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            margin: 1rem;
-            padding: 0 1rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            user-select: none;
-            z-index: 2;
-        }
-
-        .popup-won {
-            font-size: 2rem;
-            font-family: arial;
-            color: white;
-            font-weight: bold;
             background: black;
             border-radius: 1rem;
             padding: 1.5rem 1rem;
             position: absolute;
             opacity: 0;
-            cursor: default;
-            user-select: none;
             z-index: -1;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-        }
-
-        .popup-lost {
-            font-size: 2rem;
-            font-family: arial;
-            color: white;
-            font-weight: bold;
-            background: black;
-            border-radius: 1rem;
-            padding: 1.5rem 1rem;
-            position: absolute;
-            opacity: 0;
-            cursor: default;
-            user-select: none;
-            z-index: -1;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .popup-one-away {
-            font-size: 1.4rem;
-            font-family: arial;
-            color: white;
-            font-weight: bold;
-            background: black;
-            border-radius: 1rem;
-            padding: 1rem;
-            position: absolute;
-            opacity: 0;
-            cursor: default;
-            user-select: none;
-            z-index: -1;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .popup-show {
-            z-index: 3;
-        }
-
-        .popup-temp-animation {
-            animation: 3s 1 normal popup-temp;
-        }
-
-        .popup-perm {
-            animation: 0.75s 1 normal opacity-show;
-            animation-fill-mode: forwards;
-        }
+		}
 
         .close-symbol {
             color: red;
@@ -359,88 +240,54 @@
             top: 0.2rem;
             right: 0.5rem;
             cursor: pointer;
-            font-weight: bolder;
-            user-select: none;
         }
 
         .display-none {
             display: none;
         }
-
-        .input-div {
+        
+        .generator-btn {
+			@media (width <= 700px) {
+				font-size: 4.5rem;		
+			}
+			@media (width > 700px) {
+				font-size: 3.5rem;
+			}
+            
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            text-align: center;
+                        
+            &.green-bg {
+				background: green;
+			}
+			
+			&.blue-bg {
+				background: blue;
+			}
+		}
+        
+		.input-div {
             position: relative;
         }
 
-        .display-flex {
-            display: flex;
-        }
-
-        .flex-column {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .generator-row {
-            display: flex;
-            align-items: center;
-        }
-
-        .generate-cont {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 1rem;
-        }
-
-        .generate-btn {
-            width: 12rem;
-            background: green;
-            color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            padding: 1rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            user-select: none;
-            font-size: 1.5rem;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .reset-btn {
-            width: 12rem;
-            background: blue;
-            color: white;
-            font-weight: bold;
-            font-family: arial;
-            text-transform: uppercase;
-            padding: 1rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            user-select: none;
-            font-size: 1.5rem;
-            text-align: center;
-        }
-
-        .url-output {
-            width: 40rem;
-            padding: 1rem;
-            background: bisque;
-            margin-top: 1rem;
-            font-weight: bold;
-            font-family: arial;
-            white-space: nowrap;
-            overflow: auto;
-            font-size: 1.5rem;
-        }
-
-        .text-input {
-            font-size: 1.5rem;
-            height: 2rem;
-            border: 0.1rem black solid;
+        .text-input {            
+            max-width: 50rem;
+            
+            @media (width <= 700px) {
+				height: 5.5rem;
+				font-size: 4.5rem;	
+			}
+			@media (width > 700px) {
+				height: 4rem;
+				font-size: 3.5rem;
+			}
+            
             border-radius: 0.5rem;
-            padding: 0.1rem 0.2rem;
+            
+            padding: 0.1rem 1rem;
 
             &.disabled {
                 pointer-events: none;
@@ -448,30 +295,14 @@
 
             &.url {
                 background: yellow;
+                border: 0;
+                user-select: all;
+                -webkit-user-select: all;
             }
         }
 
-        .arrow-left {
-            width: 0;
-            height: 0;
-            border-top: 6rem solid transparent;
-            border-bottom: 6rem solid transparent;
-            border-right: 6rem solid black;
-            cursor: pointer;
-        }
-
-        .arrow-right {
-            width: 0;
-            height: 0;
-            border-top: 6rem solid transparent;
-            border-bottom: 6rem solid transparent;
-            border-left: 6rem solid black;
-            cursor: pointer;
-        }
-
-        .arrow-disabled {
-            opacity: 0.4;
-            cursor: initial;
+        .arrow-cont {
+            width: 50%;
         }
 
         .arrow-row {
@@ -482,53 +313,105 @@
             margin-bottom: 1rem;
         }
 
+		.arrow {
+			@media (width <= 700px) {
+				border-top: 180px solid transparent;
+				border-bottom: 180px solid transparent;
+			}
+			@media (width > 700px) {
+				border-top: 120px solid transparent;
+				border-bottom: 120px solid transparent;
+			}
+			
+			width: 0;
+            height: 0;
+            cursor: pointer;
+            
+            &.left {
+				@media (width <= 700px) {
+					border-right: 180px solid black;
+				}
+				@media (width > 700px) {
+					border-right: 120px solid black;
+				}
+			}
+			
+			&.right {
+				@media (width <= 700px) {
+					border-left: 180px solid black;
+				}
+				@media (width > 700px) {
+					border-left: 120px solid black;
+				}			}
+			
+			&.disabled {
+				opacity: 0.4;
+				cursor: initial;
+			}
+		}
+
         .generator-input-box {
             background: lightcyan;
+            
             border-radius: 0.5rem;
-            padding: 1rem;
+            
+            padding: 1rem 1rem 3rem 1rem;
             margin-bottom: 1rem;
+            
+            min-width: 55rem;
         }
 
         .title {
+			@media (width <= 700px) {
+				font-size: 5.5rem;
+			}
+			@media (width > 700px) {
+				font-size: 4rem;
+			}
+			
             border-radius: 1rem;
             margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
+            
             flex-direction: column;
             min-width: 11rem;
-            user-select: none;
-
-            font-size: 2rem;
-            font-family: arial;
-            font-weight: bold;
         }
 
         .generator-cont {
-            display: flex;
+			@media (width <= 700px) {
+				width: 100%;	
+			}
+			@media (width > 700px) {
+				max-width: 900px;
+			}
+			
             flex-direction: column;
-            align-items: center;
-
+            padding: 1rem;
+            
             &.display-none {
                 display: none;
             }
         }
 
         .copy-to-clipboard {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: black;
+			@media (width <= 700px) {
+				height: 5.5rem;
+			}
+			@media (width > 700px) {
+				height: 4rem;
+			}
+		
             top: 0;
-            right: 0;
-            width: 3rem;
-            height: 2rem;
-            border: 0.1rem black solid;
-            border-left: none;
+            right: 2.8rem;
+            
+            width: 6rem;
+            
+            padding: 0.1rem 0;
             border-top-right-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
+            
+            position: absolute;
             cursor: pointer;
-            padding: 0.1rem 0.2rem;
+            background-color: black;
 
             &.hide {
                 display: none;
@@ -539,141 +422,134 @@
             width: 2rem;
             height: 2rem;
         }
-
-        .arrow-cont {
-            width: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
     </head>
 
-    <body style="width:100vw;height:100vh;margin:0;display:flex;justify-content:center;align-items:center;">
-        <div id="generator" class="generator-cont display-none">
-            <div class="arrow-row">
-                <div class="arrow-cont">
-                    <div id="left" class="arrow-left arrow-disabled" onclick="arrow_change(event.srcElement)"></div>
-                </div>
-                <div class="arrow-cont">
-                    <div id="right" class="arrow-right" onclick="arrow_change(event.srcElement)"></div>
-                </div>
-            </div>
-            <div class="generator-input-box">
-                <div class="title">CONNECTION</div>
-                <div id="input-row" class="input-div">
-                    <input id="connection-input" class="text-input" onkeydown="switch_to_clue(event)">
-                </div>
-            </div>
-            <div class="generator-input-box">
-                <div class="title">CLUE</div>
-                <div id="input-row" class="input-div">
-                    <input id="clue-input" class="text-input" onkeydown="next_page(event)">
-                    <div id="copy-to-clipboard" class="copy-to-clipboard hide" onclick="writeClipboardText(event)">
-                        <img class="copy-file" src="copy_file.png">
-                    </div>
-                </div>
-            </div>
-            <div class="generate-btn" onclick="generate_url()" id="generate-btn">GENERATE URL</div>
-            <div class="reset-btn" onclick="reset()" id="reset-btn">RESET</div>
+    <body style="width:100vw;height:100vh;margin:0;display:flex;justify-content:center;align-items:center;touch-action:manipulation;">
+        <div id="generator" class="generator-cont display-none flex-center">
+			<div class="arrow-row">
+				<div class="arrow-cont flex-center">
+					<div id="left" class="arrow left disabled" onclick="arrow_change(event.srcElement)"></div>
+				</div>
+				<div class="arrow-cont flex-center">
+					<div id="right" class="arrow right" onclick="arrow_change(event.srcElement)"></div>
+				</div>
+			</div>
+			<div class="generator-input-box">
+				<div class="title flex-center text-params">CONNECTION</div>
+				<div id="input-row" class="input-div flex-center">
+					<input id="connection-input" class="text-input" onkeydown="switch_to_clue(event)">
+				</div>
+			</div>
+			<div class="generator-input-box">
+				<div class="title flex-center text-params">CLUE</div>
+				<div id="input-row" class="input-div flex-center">
+					<input id="clue-input" class="text-input" onkeydown="next_page(event)">
+					<div id="copy-to-clipboard" class="copy-to-clipboard hide flex-center" onclick="writeClipboardText(event)">
+						<img class="copy-file" src="copy_file.png">
+					</div>
+				</div>
+			</div>
+			<div class="flex-center space-around full-width">
+				<div class="generator-btn green-bg text-params" onclick="generate_url()" id="generate-btn">GENERATE URL</div>
+				<div class="generator-btn blue-bg text-params" onclick="reset()" id="reset-btn">RESET</div>            
+			</div>
         </div>
 
         <div id="game" class="display-none">
-            <div class="popup-won" id="won">
-                <div class="close-symbol" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
+            <div class="popup won-lost text-params" id="won">
+                <div class="close-symbol text-params" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
                 WELL DONE!
             </div>
-            <div class="popup-lost" id="lost">
-                <div class="close-symbol" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
+            <div class="popup won-lost text-params" id="lost">
+                <div class="close-symbol text-params" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
                 UNLUCKY!
             </div>
-            <div class="popup-one-away" id="one-away">ONE AWAY...</div>
-            <div class="popup-one-away" id="already-guessed">ALREADY GUESSED</div>
+            <div class="popup one-away-already-guessed text-params" id="one-away">ONE AWAY...</div>
+            <div class="popup one-away-already-guessed text-params" id="already-guessed">ALREADY GUESSED</div>
             <div class="connections-cont">
-                <div class="clues-cont">
-                    <div class="clue-row">
-                        <div class="clue-box" id="0" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="1" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="2" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="3" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-answers" id="clue-answer-0">
-                            <div class="answer-connection" id="answer-connection-0"></div>
-                            <div class="answer-clues" id="answer-clues-0"></div>
-                        </div>
-                    </div>
-                    <div class="clue-row">
-                        <div class="clue-box" id="4" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="5" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="6" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="7" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-answers" id="clue-answer-1">
-                            <div class="answer-connection" id="answer-connection-1"></div>
-                            <div class="answer-clues" id="answer-clues-1"></div>
-                        </div>
-                    </div>
-                    <div class="clue-row">
-                        <div class="clue-box" id="8" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="9" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="10" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="11" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-answers" id="clue-answer-2">
-                            <div class="answer-connection" id="answer-connection-2"></div>
-                            <div class="answer-clues" id="answer-clues-2"></div>
-                        </div>
-                    </div>
-                    <div class="clue-row">
-                        <div class="clue-box" id="12" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="13" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="14" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-box" id="15" onclick="box_click(event)">
-                        </div>
-                        <div class="clue-answers" id="clue-answer-3">
-                            <div class="answer-connection" id="answer-connection-3"></div>
-                            <div class="answer-clues" id="answer-clues-3"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="button-row">
-                    <div class="shuffle-button" onclick="shuffle()">
-                        Shuffle
-                    </div>
-                    <div class="submit-button" onclick="check_answer()">
-                        Check
-                    </div>
-                    <div class="lives" id="lives"></div>
-                    <div class="restart disabled" id="restart" onclick="restart()">
-                        Restart
-                    </div>
-                    <div class="reveal" id="reveal" onclick="reveal()">
-                        REVEAL
-                    </div>
-                </div>
-            </div>
+				<div class="clue-row flex-center">
+					<div class="clue-box text-params flex-center" id="0" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="1" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="2" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="3" onclick="box_click(event)">
+					</div>
+					<div class="clue-answers" id="clue-answer-0">
+						<div class="answer-connection text-params" id="answer-connection-0"></div>
+						<div class="answer-clues text-params not-bold" id="answer-clues-0"></div>
+					</div>
+				</div>
+				<div class="clue-row flex-center">
+					<div class="clue-box text-params flex-center" id="4" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="5" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="6" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="7" onclick="box_click(event)">
+					</div>
+					<div class="clue-answers" id="clue-answer-1">
+						<div class="answer-connection text-params" id="answer-connection-1"></div>
+						<div class="answer-clues text-params not-bold" id="answer-clues-1"></div>
+					</div>
+				</div>
+				<div class="clue-row flex-center">
+					<div class="clue-box text-params flex-center" id="8" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="9" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="10" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="11" onclick="box_click(event)">
+					</div>
+					<div class="clue-answers" id="clue-answer-2">
+						<div class="answer-connection text-params" id="answer-connection-2"></div>
+						<div class="answer-clues text-params not-bold" id="answer-clues-2"></div>
+					</div>
+				</div>
+				<div class="clue-row flex-center">
+					<div class="clue-box text-params flex-center" id="12" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="13" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="14" onclick="box_click(event)">
+					</div>
+					<div class="clue-box text-params flex-center" id="15" onclick="box_click(event)">
+					</div>
+					<div class="clue-answers" id="clue-answer-3">
+						<div class="answer-connection text-params" id="answer-connection-3"></div>
+						<div class="answer-clues text-params not-bold" id="answer-clues-3"></div>
+					</div>
+				</div>
+			</div>
+			<div class="button-row flex-center">
+				<div class="grid-btn text-params flex-center" onclick="shuffle()">
+					Shuffle
+				</div>
+				<div class="grid-btn text-params flex-center" onclick="check_answer()">
+					Check
+				</div>
+				<div class="grid-btn text-params flex-center" id="lives"></div>
+				<div class="grid-btn text-params disabled flex-center" id="restart" onclick="restart()">
+					Restart
+				</div>
+				<div class="grid-btn text-params flex-center" id="reveal" onclick="reveal()">
+					REVEAL
+				</div>
+			</div>
         </div>
     </body>
 
     <script>
         function arrow_change(src_element)
         {
-            if (!src_element.classList.contains("arrow-disabled"))
+            if (!src_element.classList.contains("disabled"))
             {
-                document.getElementById("right").classList.remove("arrow-disabled");
-                document.getElementById("left").classList.remove("arrow-disabled");
+                document.getElementById("right").classList.remove("disabled");
+                document.getElementById("left").classList.remove("disabled");
 
                 user_clues[page_index] = document.getElementById("clue-input").value;
                 user_connections[Math.floor(page_index/4)%4] = document.getElementById("connection-input").value;
@@ -694,10 +570,10 @@
                     document.getElementById("connection-input").value = "";
 
                 if (page_index == 0)
-                    document.getElementById("left").classList.add("arrow-disabled");
+                    document.getElementById("left").classList.add("disabled");
 
                 if (page_index == 15)
-                    document.getElementById("right").classList.add("arrow-disabled");
+                    document.getElementById("right").classList.add("disabled");
             }
         }
 
@@ -824,7 +700,7 @@
             });
 
             let answer_row = document.getElementById("clue-answer-" + row_num);
-            answer_row.classList.add("clue-answers-show");
+            answer_row.classList.add("flex-center");
             answer_row.classList.add("show-answer");
         }
 
@@ -889,26 +765,26 @@
             if (popup_type == "win")
             {
                 let element = document.getElementById("won");
-                element.classList.add("popup-show", "popup-perm");
+                element.classList.add("show", "permanent");
             }
             else if (popup_type == "lost")
             {
                 let element = document.getElementById("lost");
-                element.classList.add("popup-show", "popup-perm");
+                element.classList.add("show", "permanent");
             }
             else if (popup_type == "one-away")
             {
                 let element = document.getElementById("one-away");
-                element.classList.remove("popup-temp-animation");
+                element.classList.remove("fade-away");
                 void element.offsetWidth;
-                element.classList.add("popup-temp-animation");
+                element.classList.add("fade-away");
             }
             else if (popup_type == "already-guessed")
             {
                 let element = document.getElementById("already-guessed");
-                element.classList.remove("popup-temp-animation");
+                element.classList.remove("fade-away");
                 void element.offsetWidth;
-                element.classList.add("popup-temp-animation");
+                element.classList.add("fade-away");
             }
         }
 
@@ -917,22 +793,22 @@
             if (popup_type == "won")
             {
                 let element = document.getElementById("won");
-                element.classList.remove("popup-show", "popup-perm");
+                element.classList.remove("show", "permanent");
             }
             else if (popup_type == "lost")
             {
                 let element = document.getElementById("lost");
-                element.classList.remove("popup-show", "popup-perm");
+                element.classList.remove("show", "permanent");
             }
             else if (popup_type == "one-away")
             {
                 let element = document.getElementById("one-away");
-                element.classList.remove("popup-temp-animation");
+                element.classList.remove("fade-away");
             }
             else if (popup_type == "already-guessed")
             {
                 let element = document.getElementById("already-guessed");
-                element.classList.remove("popup-temp-animation");
+                element.classList.remove("fade-away");
             }
         }
 
@@ -996,7 +872,7 @@
                 for (let i = 0; i < 4; ++i)
                 {
                     let element = document.getElementById("clue-answer-" + i);
-                    element.classList.remove("show-answer", "clue-answers-show");
+                    element.classList.remove("show-answer", "flex-center");
 
                     connections[i].solved = 0;
                 }
