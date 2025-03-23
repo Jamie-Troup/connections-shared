@@ -7,8 +7,8 @@
     <style>		
 		.flex-center {
 			display: flex;
-			justify-content: center;
-			align-items: center;
+			justify-content: safe center;
+			align-items: safe center;
 			
 			&.space-around {
 				justify-content: space-around;
@@ -30,29 +30,41 @@
 				font-weight: initial;
 			}
 		}
+		
+		.game-cont {
+			height: 100%;
+			display: flex;
+			justify-content: safe center;
+			flex-direction: column;
+		}
 
         .clue-row {
             flex-direction: row;
         }
 
         .clue-box {
-            width: 10rem;
-            height: 10rem;
+            width: 11.5rem;
+            height: 11.5rem;
             
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             
-            background: aqua;
-            
-            margin: 1rem;
-            
+            padding: 0.5rem;
+            margin: 0.5rem;
             border-radius: 1rem;
+            
+            word-wrap: anywhere;
+            overflow-y: auto;
+            hyphens: auto;
             
             position: relative;
             
+            text-align: center;
+            
             cursor: pointer;
-            
+            background: aqua;
             z-index: 2;
-            
+            -webkit-tap-highlight-color: transparent;
+               
             &.clicked {
 				background: cadetblue;
 			}
@@ -67,18 +79,22 @@
             flex-direction: column;
             
             display: none;
-            
+                        
             opacity: 0;
             
             z-index: 2;
+            
+            &.show {
+				display: initial;
+			}
         }
 
         .answer-connection {
-            font-size: 1.4rem;
+            font-size: 4rem;
         }
 
         .answer-clues {
-            font-size: 1.4rem;
+            font-size: 3rem;
         }
 
         .incorrect-shake {
@@ -106,6 +122,7 @@
         .show-answer {
             animation: 0.75s 1 normal opacity-show;
             animation-fill-mode: forwards;
+            display: flex;
         }
         
 		@keyframes incorrect-shake {
@@ -139,18 +156,18 @@
         }
 
         @keyframes correct-centre-box {
-            from {margin: 1rem 1rem; padding: 0rem 0rem; border-radius: 1rem; background: aqua; color: initial;}
-            to   {margin: 1rem 0rem; padding: 0rem 1rem; border-radius: 0rem; background: lime; color: transparent;}
+            from {margin: 0.5rem 0.5rem; padding: 0.5rem 0.5rem; border-radius: 1rem; background: aqua; color: initial;}
+            to   {margin: 0.5rem 0rem; padding: 0.5rem 1rem; border-radius: 0rem; background: lime; color: transparent;}
         }
 
         @keyframes correct-left-box {
-            from {margin: 1rem 1rem; padding-right: 0rem; border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; background: aqua; color: initial;}
-            to   {margin: 1rem 0rem 1rem 1rem; padding-right: 1rem; border-top-right-radius: 0rem; border-bottom-right-radius: 0rem; background: lime; color: transparent;}
+            from {margin: 0.5rem 0.5rem 0.5rem 0.5rem; padding-right: 0.5rem; border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; background: aqua; color: initial;}
+            to   {margin: 0.5rem 0rem 0.5rem 0.5rem; padding-right: 1rem; border-top-right-radius: 0rem; border-bottom-right-radius: 0rem; background: lime; color: transparent;}
         }
 
         @keyframes correct-right-box {
-            from {margin: 1rem 1rem; padding-left: 0rem; border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; background: aqua; color: initial;}
-            to   {margin: 1rem 1rem 1rem 0rem; padding-left: 1rem; border-top-left-radius: 0rem; border-bottom-left-radius: 0rem; background: lime; color: transparent;}
+            from {margin: 0.5rem 0.5rem 0.5rem 0.5rem; padding-left: 0.5rem; border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; background: aqua; color: initial;}
+            to   {margin: 0.5rem 0.5rem 0.5rem 0rem; padding-left: 1rem; border-top-left-radius: 0rem; border-bottom-left-radius: 0rem; background: lime; color: transparent;}
         }
 
         @keyframes opacity-show {
@@ -182,16 +199,22 @@
         }
         
 		.grid-btn {
-            width: 5rem;
-            height: 4rem;
-            
+			padding: 0.5rem;
+			font-size: 2rem;
+			            
             background: black;
             color: white;
-            margin: 1rem;
-            padding: 0 1rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            margin-right: 0.5rem;
+            padding: 0.8rem;
             border-radius: 1rem;
             cursor: pointer;
             z-index: 2;
+            
+            &:last-child {
+				margin-right: 0rem;
+			}
             
 			&.disabled {
                 cursor: initial;
@@ -201,11 +224,11 @@
         
         .popup {
 			&.won-lost {
-				font-size: 2rem;				
+				padding: 3rem 2rem;				
 			}
 			
 			&.one-away-already-guessed {
-				font-sie: 1.4rem;
+				
 			}
 			
 			&.show {
@@ -221,6 +244,7 @@
 				animation-fill-mode: forwards;
 			}
             
+            font-size: 4rem;
             color: white;
             background: black;
             border-radius: 1rem;
@@ -231,11 +255,12 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
+            text-align: center;
 		}
 
         .close-symbol {
             color: red;
-            font-size: 1.5rem;
+            font-size: 3rem;
             position: absolute;
             top: 0.2rem;
             right: 0.5rem;
@@ -459,71 +484,73 @@
         </div>
 
         <div id="game" class="display-none">
-            <div class="popup won-lost text-params" id="won">
-                <div class="close-symbol text-params" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
-                WELL DONE!
-            </div>
-            <div class="popup won-lost text-params" id="lost">
-                <div class="close-symbol text-params" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
-                UNLUCKY!
-            </div>
-            <div class="popup one-away-already-guessed text-params" id="one-away">ONE AWAY...</div>
-            <div class="popup one-away-already-guessed text-params" id="already-guessed">ALREADY GUESSED</div>
-            <div class="connections-cont">
-				<div class="clue-row flex-center">
-					<div class="clue-box text-params flex-center" id="0" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="1" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="2" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="3" onclick="box_click(event)">
-					</div>
-					<div class="clue-answers" id="clue-answer-0">
-						<div class="answer-connection text-params" id="answer-connection-0"></div>
-						<div class="answer-clues text-params not-bold" id="answer-clues-0"></div>
-					</div>
+			<div>
+				<div class="popup won-lost text-params" id="won">
+					<div class="close-symbol text-params" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
+					WELL DONE!
 				</div>
-				<div class="clue-row flex-center">
-					<div class="clue-box text-params flex-center" id="4" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="5" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="6" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="7" onclick="box_click(event)">
-					</div>
-					<div class="clue-answers" id="clue-answer-1">
-						<div class="answer-connection text-params" id="answer-connection-1"></div>
-						<div class="answer-clues text-params not-bold" id="answer-clues-1"></div>
-					</div>
+				<div class="popup won-lost text-params" id="lost">
+					<div class="close-symbol text-params" onclick="close_popup(event.srcElement.parentElement.id)">X</div>
+					UNLUCKY!
 				</div>
-				<div class="clue-row flex-center">
-					<div class="clue-box text-params flex-center" id="8" onclick="box_click(event)">
+				<div class="popup one-away-already-guessed text-params" id="one-away">ONE AWAY...</div>
+				<div class="popup one-away-already-guessed text-params" id="already-guessed">ALREADY GUESSED</div>
+				<div class="connections-cont">
+					<div class="clue-row flex-center">
+						<div class="clue-box text-params flex-center" id="0" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="1" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="2" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="3" onclick="box_click(event)">
+						</div>
+						<div class="clue-answers" id="clue-answer-0">
+							<div class="answer-connection text-params" id="answer-connection-0"></div>
+							<div class="answer-clues text-params not-bold" id="answer-clues-0"></div>
+						</div>
 					</div>
-					<div class="clue-box text-params flex-center" id="9" onclick="box_click(event)">
+					<div class="clue-row flex-center">
+						<div class="clue-box text-params flex-center" id="4" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="5" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="6" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="7" onclick="box_click(event)">
+						</div>
+						<div class="clue-answers" id="clue-answer-1">
+							<div class="answer-connection text-params" id="answer-connection-1"></div>
+							<div class="answer-clues text-params not-bold" id="answer-clues-1"></div>
+						</div>
 					</div>
-					<div class="clue-box text-params flex-center" id="10" onclick="box_click(event)">
+					<div class="clue-row flex-center">
+						<div class="clue-box text-params flex-center" id="8" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="9" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="10" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="11" onclick="box_click(event)">
+						</div>
+						<div class="clue-answers" id="clue-answer-2">
+							<div class="answer-connection text-params" id="answer-connection-2"></div>
+							<div class="answer-clues text-params not-bold" id="answer-clues-2"></div>
+						</div>
 					</div>
-					<div class="clue-box text-params flex-center" id="11" onclick="box_click(event)">
-					</div>
-					<div class="clue-answers" id="clue-answer-2">
-						<div class="answer-connection text-params" id="answer-connection-2"></div>
-						<div class="answer-clues text-params not-bold" id="answer-clues-2"></div>
-					</div>
-				</div>
-				<div class="clue-row flex-center">
-					<div class="clue-box text-params flex-center" id="12" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="13" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="14" onclick="box_click(event)">
-					</div>
-					<div class="clue-box text-params flex-center" id="15" onclick="box_click(event)">
-					</div>
-					<div class="clue-answers" id="clue-answer-3">
-						<div class="answer-connection text-params" id="answer-connection-3"></div>
-						<div class="answer-clues text-params not-bold" id="answer-clues-3"></div>
+					<div class="clue-row flex-center">
+						<div class="clue-box text-params flex-center" id="12" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="13" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="14" onclick="box_click(event)">
+						</div>
+						<div class="clue-box text-params flex-center" id="15" onclick="box_click(event)">
+						</div>
+						<div class="clue-answers" id="clue-answer-3">
+							<div class="answer-connection text-params" id="answer-connection-3"></div>
+							<div class="answer-clues text-params not-bold" id="answer-clues-3"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1115,7 +1142,7 @@
                         connections[connection_num].connection = key_or_val[1].replaceAll('+', ' ');
                     else if (key_or_val[0] == "clue")
                     {
-                        clues.push(key_or_val[1].replaceAll('+', ' '));
+                        clues.push(key_or_val[1].replaceAll('+', ' ').toLowerCase());
                         connections[connection_num].clue_nums.push(clues_arr_index++);
                     }
                 });
